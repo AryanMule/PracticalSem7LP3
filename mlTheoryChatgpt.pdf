@@ -1,0 +1,204 @@
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## 🧩 **5. Uber Fare Price Prediction**
+
+**Goal:** Predict how much an Uber ride will cost based on pickup and drop-off details.
+
+### Steps & Theory:
+
+1. **Preprocess the dataset**
+
+   * Dataset usually has columns like `pickup_latitude`, `pickup_longitude`, `dropoff_latitude`, `dropoff_longitude`, `passenger_count`, `fare_amount`.
+   * Tasks:
+
+     * Remove missing values (rows with `NaN` fares or coordinates).
+     * Remove incorrect fares (like negative values).
+     * Calculate **distance** using the Haversine formula (distance between two GPS points).
+
+   💡 *Example:*
+   If pickup = (40.76, -73.97) and dropoff = (40.64, -73.78), the distance is around 15 km. More distance → more fare.
+
+2. **Identify outliers**
+
+   * Remove crazy data points like:
+
+     * fare > ₹10,000 or < 0
+     * passenger_count = 0 or > 6
+     * unrealistic distances (>100 km)
+
+3. **Check correlation**
+
+   * Use `.corr()` or heatmap to find which features affect fare the most.
+   * Typically, **distance** is most correlated with `fare_amount`.
+
+4. **Build models**
+
+   * **Linear Regression:** fits a straight line relationship between distance & fare.
+   * **Random Forest Regression:** uses many decision trees to capture non-linear relationships.
+
+5. **Evaluate**
+
+   * Use metrics:
+
+     * **R² (coefficient of determination):** higher is better (1 = perfect)
+     * **RMSE (root mean square error):** lower is better (measures average prediction error)
+   * Compare which model performs better.
+
+💡 *Example:*
+Linear Regression might give R² = 0.82, RMSE = 3.5
+Random Forest might give R² = 0.93, RMSE = 2.1 → better accuracy.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## 📧 **6. Email Spam Detection**
+
+**Goal:** Classify an email as *Spam* or *Not Spam.*
+
+### Steps & Theory:
+
+1. **Dataset:**
+
+   * Each email has words/features like “free”, “win”, “offer”, etc., and a label → `spam` or `not spam`.
+
+2. **Preprocessing:**
+
+   * Clean the text: lowercase, remove punctuation, stopwords.
+   * Convert text into numbers using:
+
+     * **Bag of Words (BoW)** or
+     * **TF-IDF (Term Frequency–Inverse Document Frequency)**
+
+3. **Algorithms:**
+
+   * **KNN (K-Nearest Neighbors):** Looks at nearby data points to predict the class.
+
+     * Example: If 4 out of 5 nearest emails were “spam”, new one is also spam.
+   * **SVM (Support Vector Machine):** Finds a line or boundary that best separates spam and non-spam emails.
+
+4. **Evaluation Metrics:**
+
+   * **Accuracy:** % of correct predictions
+   * **Precision:** % of emails predicted spam that were actually spam
+   * **Recall:** % of actual spam emails correctly caught
+   * **F1-score:** balance of precision & recall
+
+💡 *Example:*
+SVM might outperform KNN since text data is high-dimensional.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## 🏦 **7. Bank Customer Churn Prediction**
+
+**Goal:** Predict if a bank customer will leave the bank in the next 6 months.
+
+### Steps & Theory:
+
+1. **Read dataset**
+
+   * Features: `CreditScore`, `Age`, `Balance`, `Geography`, `Gender`, `Tenure`, etc.
+   * Target: `Exited` (1 = Left, 0 = Stayed)
+
+2. **Preprocessing**
+
+   * Remove useless columns (`CustomerId`, `Surname`)
+   * Convert categorical columns (`Geography`, `Gender`) using **One-Hot Encoding**
+   * Split into **X (features)** and **y (target)**
+   * Train-Test Split (e.g., 80–20)
+
+3. **Normalization**
+
+   * Scale numeric features so they have equal weight (StandardScaler or MinMaxScaler).
+
+4. **Build Neural Network**
+
+   * Input layer = features
+   * Hidden layers = neurons with activation (e.g. ReLU)
+   * Output layer = 1 neuron with sigmoid activation (for binary output)
+
+5. **Train, Evaluate**
+
+   * Loss = binary crossentropy
+   * Metric = accuracy
+   * Evaluate with:
+
+     * **Accuracy score**
+     * **Confusion matrix** (TP, FP, TN, FN)
+
+💡 *Example:*
+Model predicts churn with 86% accuracy. If recall is low, you might increase hidden neurons, train longer, or use dropout to prevent overfitting.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## 💉 **8. Diabetes Prediction (KNN)**
+
+**Goal:** Predict whether a person has diabetes based on health data.
+
+### Steps & Theory:
+
+1. **Dataset:**
+
+   * Features: `Pregnancies`, `Glucose`, `BMI`, `Age`, etc.
+   * Target: `Outcome` (1 = Diabetic, 0 = Not diabetic)
+
+2. **Preprocessing**
+
+   * Handle missing or zero values.
+   * Split into train-test.
+   * Scale numeric data.
+
+3. **Model:**
+
+   * Use **K-Nearest Neighbors (KNN)** algorithm.
+   * Choose optimal K (odd number usually between 3–15).
+
+4. **Evaluation:**
+
+   * **Confusion Matrix:** TP, TN, FP, FN
+   * **Accuracy**
+   * **Error Rate = 1 – Accuracy**
+   * **Precision**
+   * **Recall**
+
+💡 *Example:*
+If model accuracy = 78%, precision = 75%, recall = 70% — you can tune `k` or normalize better.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## 💼 **9. Customer Segmentation (Clustering)**
+
+**Goal:** Group customers with similar buying behavior.
+
+### Steps & Theory:
+
+1. **Dataset:**
+
+   * Sales data like `ProductLine`, `Sales`, `Country`, `PriceEach`, etc.
+
+2. **Preprocessing:**
+
+   * Select numeric columns.
+   * Handle missing values.
+   * Scale data (important for clustering).
+
+3. **K-Means Clustering:**
+
+   * Algorithm groups data into *k* clusters based on similarity (Euclidean distance).
+   * Example: Cluster 1 = “High spenders”, Cluster 2 = “Low spenders”.
+
+4. **Elbow Method:**
+
+   * Plot `Number of clusters (k)` vs `Inertia (Sum of squared distances)`.
+   * Choose the *elbow point* (where curve bends) → best k.
+
+5. **Hierarchical Clustering (optional):**
+
+   * Builds a tree (dendrogram) to merge similar customers.
+
+💡 *Example:*
+You find 3 clusters:
+
+* Cluster 1 – Premium buyers
+* Cluster 2 – Regular customers
+* Cluster 3 – Discount seekers
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
