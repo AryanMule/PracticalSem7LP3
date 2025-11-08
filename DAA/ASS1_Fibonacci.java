@@ -1,49 +1,45 @@
-
 import java.util.*;
 
-// ASS1_Fibonacci
+// 🧮 ASS1_Fibonacci — Recursive vs Iterative Comparison
 public class ASS1_Fibonacci {
 
-    // Global counter used to count "steps" for whichever method we run.
-    // For recursive: it counts how many times the recursive function is called.
-    // For iterative: it counts how many loop iterations (main operations) were executed.
-    static int stepCount = 0; // global counter
+    // Global counter to count the total steps taken in each method
+    // (For recursive: counts function calls, for iterative: loop iterations)
+    static int stepCount = 0;
 
-    // -----------------------
-    // Recursive Fibonacci
-    // -----------------------
-    // This version directly follows the mathematical definition:
-    // fibonacci(n) = fibonacci(n-1) + fibonacci(n-2) for n > 1,
-    // with base cases fibonacci(0)=0, fibonacci(1)=1.
+    // ---------------------------------------------------------
+    // 🔁 Recursive Fibonacci
+    // ---------------------------------------------------------
+    // Follows the mathematical definition directly:
+    // F(n) = F(n-1) + F(n-2), with base cases F(0)=0, F(1)=1
     static int fibonacciRecursive(int n) {
-        // Count every function call — this shows how expensive recursion is.
-        stepCount++; // count every call. Each time the function is called, we increase the step count.
-        if (n <= 1) { // base cases: 0 or 1
-            return n;
+        stepCount++; // count each recursive call
+        if (n <= 1) {
+            return n; // base condition
         }
-        // Two recursive calls for each non-base n -> causes exponential blow-up.
+        // Recursive case — call itself twice
         return fibonacciRecursive(n - 1) + fibonacciRecursive(n - 2);
     }
 
-    // -----------------------
-    // Iterative Fibonacci (efficient)
-    // -----------------------
-    // Uses a simple loop and only constant extra memory.
+    // ---------------------------------------------------------
+    // 🔂 Iterative Fibonacci (Efficient)
+    // ---------------------------------------------------------
+    // Uses loop and only a few variables, avoiding recursion.
     static int fibonacciIterative(int n) {
-        int a = 0, b = 1, c = 0; // a = F(0), b = F(1), c temporary
-        stepCount = 0; // reset steps. For iterative, stepCount measures loop iterations (main ops)
-        if (n == 0) { // handle n = 0 explicitly
-            return a;
-        }
-        // Loop from 2 to n computing each Fibonacci by summing previous two.
-        // For n = 1 the loop is skipped and b (which is 1) is returned.
+        int a = 0, b = 1, c = 0;
+        stepCount = 0; // reset counter for iterative approach
+
+        if (n == 0)
+            return a; // directly return 0
+
+        // Loop from 2 → n to compute next Fibonacci number
         for (int i = 2; i <= n; i++) {
-            c = a + b; // compute next Fibonacci number
-            a = b;     // slide window: old b becomes new a
-            b = c;     // new b is the newly computed Fibonacci
-            stepCount++; // one main operation per loop iteration
+            c = a + b;
+            a = b;
+            b = c;
+            stepCount++; // count each loop iteration
         }
-        return b; // b now holds F(n)
+        return b; // return the final Fibonacci number
     }
 
     public static void main(String[] args) {
@@ -51,43 +47,108 @@ public class ASS1_Fibonacci {
         System.out.print("Enter n: ");
         int n = sc.nextInt();
 
-        // Recursive approach: run and show step count (number of recursive calls)
+        // Recursive Result
         stepCount = 0;
         int resultRecursive = fibonacciRecursive(n);
-        System.out.println("Recursive Fibonacci(" + n + ") = " + resultRecursive);
+        System.out.println("\nRecursive Fibonacci(" + n + ") = " + resultRecursive);
         System.out.println("Step Count (Recursive): " + stepCount);
 
-        // Iterative approach: run and show step count (number of loop iterations)
+        // Iterative Result
         int resultIterative = fibonacciIterative(n);
-        System.out.println("Iterative Fibonacci(" + n + ") = " + resultIterative);
+        System.out.println("\nIterative Fibonacci(" + n + ") = " + resultIterative);
         System.out.println("Step Count (Iterative): " + stepCount);
-
     }
 }
 
+/*
+=====================================================================
+📘 TRACE EXAMPLES
+=====================================================================
+🔹 Recursive (n=4)
+F(4) = F(3) + F(2)
+     = (F(2) + F(1)) + (F(1) + F(0))
+     = ((F(1)+F(0)) + 1) + (1 + 0)
+     = ((1+0)+1)+(1+0)
+     = 3
+→ Step Count grows fast because F(2) repeats many times.
 
-// RECURSIVE APPROACH 
-// f(4)
-// = f(3) + f(2)
-// = (f(2) + f(1)) + (f(1) + f(0))
-// = ((f(1)+f(0)) + 1) + (1 + 0)
-// = ((1+0)+1)+(1+0) = 3
-// But here’s the catch — it does a LOT of repeated work.
-// For example, f(2) is calculated multiple times.
-// That’s why the recursive step count grows exponentially (O(2^n)).
-// ITERATIVE APPROACH
-// Let’s trace it for n = 5:
-// i	a	b	c = a+b	stepCount
-// Start	0	1	-	0
-// 2	0	1	1	1
-// 3	1	1	2	2
-// 4	1	2	3	3
-// 5	2	3	5	4
-// At the end, b = 5, which is Fibonacci(5).
-// ✅ No repeated calculations.
-// ✅ Runs in linear time (O(n))
-// ✅ Much faster for large n.
-// 💡 Key Takeaways
-// Approach	Time Complexity	Steps (for n=5)	Space Used	Comments
-// Recursive	O(2^n)	15	High (due to call stack)	Conceptually simple but inefficient
-// Iterative	O(n)	4	Low	Fast and memory efficient
+🔹 Iterative (n=5)
+i	a	b	c=a+b	stepCount
+0	0	1	-	0
+2	0	1	1	1
+3	1	1	2	2
+4	1	2	3	3
+5	2	3	5	4
+✅ Result: F(5) = 5
+✅ Efficient and no repeated calculations
+=====================================================================
+*/
+
+// =============================================================
+// ⚙️ COMPLEXITY ANALYSIS
+// =============================================================
+// 🔁 Recursive:
+//     → Time Complexity: O(2^n)  (due to repeated calls)
+//     → Space Complexity: O(n)   (recursive call stack)
+//
+// 🔂 Iterative:
+//     → Time Complexity: O(n)
+//     → Space Complexity: O(1)
+//
+// ✅ Iterative method is much faster and memory-friendly.
+// =============================================================
+
+
+// =============================================================
+// 💡 KEY DIFFERENCES (Summary Table)
+// =============================================================
+// Approach     | Time        | Space | Steps (n=5) | Efficiency | Comment
+// ----------------------------------------------------------------------
+// Recursive    | O(2^n)      | O(n)  | 15          | Slow       | Repeats same calls
+// Iterative    | O(n)        | O(1)  | 4           | Fast       | Simple loop, no recursion
+// =============================================================
+
+
+// =============================================================
+// 🎯 IMPORTANT THEORY POINTS (Exam/Interview)
+// =============================================================
+// 🔸 Fibonacci Series: 0, 1, 1, 2, 3, 5, 8, 13, ...
+// 🔸 Each term = sum of previous two terms.
+// 🔸 Recursion gives direct mathematical clarity, but is inefficient.
+// 🔸 Iteration is preferred for real-world programming.
+// 🔸 Recursive method causes “overlapping subproblems”.
+
+
+// =============================================================
+// 🎓 VIVA QUESTIONS (with Easy Answers)
+// =============================================================
+
+// Q1) What is Fibonacci Series?
+// → It’s a series where each term is the sum of the previous two: 0, 1, 1, 2, 3, 5, 8...
+
+// Q2) What is recursion?
+// → When a function calls itself until a base condition is met.
+
+// Q3) Why is recursion slower here?
+// → Because it repeats the same calculations multiple times and uses more memory.
+
+// Q4) What is the time complexity of recursive Fibonacci?
+// → O(2^n), because each call branches into two more calls.
+
+// Q5) What is the time complexity of iterative Fibonacci?
+// → O(n), because it just runs a simple loop from 2 to n.
+
+// Q6) Which method is better and why?
+// → Iterative — it uses less memory and runs much faster.
+
+// Q7) What is the space complexity of recursion?
+// → O(n), since each call is stored in the call stack.
+
+// Q8) What is meant by “step count” in this program?
+// → It represents how many operations (calls/loops) are performed — helps compare both methods.
+
+// Q9) Can recursion be optimized?
+// → Yes, by using **Dynamic Programming** (Memoization) to store already calculated results.
+
+// Q10) Which approach will you use in large input (like n=40)?
+// → Iterative, because recursion becomes too slow and memory-heavy.
